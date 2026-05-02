@@ -3,435 +3,715 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
 <title>H&H Revenue and Funding Architecture</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Bebas+Neue&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-/* ─── SCREEN STYLES ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: light only; }
 
 :root {
-  --green-deep:   #0B1C10;
-  --green-mid:    #152C1A;
-  --green-light:  #1E3D24;
-  --gold:         #C87C2C;
-  --gold-dim:     rgba(200,124,44,0.35);
-  --gold-faint:   rgba(200,124,44,0.10);
-  --cream:        #F0E4C6;
-  --cream-65:     rgba(240,228,198,0.65);
-  --cream-45:     rgba(240,228,198,0.45);
-  --cream-25:     rgba(240,228,198,0.25);
-  --cream-10:     rgba(240,228,198,0.10);
-  --sage:         #4A9E72;
-  --sage-dim:     rgba(74,158,114,0.20);
-  --amber-dim:    rgba(200,124,44,0.15);
+  --gd: #0F2314;
+  --gm: #1E3D24;
+  --gl: #2A5433;
+  --cream: #F8F2E4;
+  --cream-d: #EDE3CC;
+  --ink: #0F1F12;
+  --ink-mid: #2a3a2c;
+  --ink-light: #4a5e4c;
+  --gold: #C87C2C;
+  --gold-l: #E0962E;
+  --sage: #4A9E72;
+  --sage-d: #2D6A4F;
+  --amber: #B86E24;
+  --border: #C8D8CA;
 }
 
 body {
-  background: var(--green-deep);
+  background: #F8F2E4;
   font-family: 'Jost', sans-serif;
-  color: var(--cream);
-  padding: 48px 24px 72px;
-  display: flex;
-  justify-content: center;
+  color: #0F1F12;
+  font-size: 15px;
   line-height: 1;
+  -webkit-text-size-adjust: 100%;
 }
 
-.doc {
-  width: 100%;
-  max-width: 820px;
-}
-
-/* ─── COVER ─── */
+/* ── COVER ── */
 .cover {
-  background: var(--green-mid);
-  border-radius: 8px;
-  border-left: 5px solid var(--gold);
-  padding: 36px 40px;
-  margin-bottom: 14px;
+  background: var(--gd);
+  color: #F0E4C6;
+  padding: clamp(36px,6vw,64px) clamp(20px,5vw,56px) clamp(36px,6vw,56px);
   position: relative;
   overflow: hidden;
 }
 
-.cover::after {
-  content: '';
+.cover-pattern {
   position: absolute;
-  right: -50px; top: -50px;
-  width: 260px; height: 260px;
-  border-radius: 50%;
-  background: rgba(200,124,44,0.04);
-  pointer-events: none;
+  inset: 0;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    60deg,
+    #F0E4C6 0px, #F0E4C6 1px,
+    transparent 1px, transparent 40px
+  ),
+  repeating-linear-gradient(
+    -60deg,
+    #F0E4C6 0px, #F0E4C6 1px,
+    transparent 1px, transparent 40px
+  );
 }
 
-.eyebrow {
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 44px;
+}
+
+.cover-org {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 11px;
-  letter-spacing: 6px;
+  letter-spacing: 5px;
   color: var(--gold);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+.cover-org-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: #F0E4C6;
+  line-height: 1.1;
+}
+
+.cover-meta {
+  text-align: right;
+  font-size: 12px;
+  color: rgba(240,228,198,0.45);
+  line-height: 1.7;
+}
+
+.cover-meta strong {
+  display: block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: rgba(200,124,44,0.7);
+  margin-bottom: 3px;
+  font-weight: 400;
+}
+
+.cover-body { position: relative; z-index: 1; }
+
+.cover-eyebrow {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  margin-bottom: 14px;
 }
 
 .cover-title {
   font-family: 'Playfair Display', serif;
-  font-size: 40px;
+  font-size: clamp(28px,5vw,44px);
   font-weight: 900;
-  color: var(--cream);
-  line-height: 1.0;
-  margin-bottom: 6px;
+  line-height: 1.08;
+  color: #F0E4C6;
+  margin-bottom: 18px;
 }
 
-.cover-sub {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 12px;
-  letter-spacing: 5px;
-  color: rgba(200,124,44,0.55);
-  margin-bottom: 22px;
+.cover-title em {
+  font-style: italic;
+  color: rgba(240,228,198,0.55);
 }
 
 .cover-intro {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-style: italic;
-  color: var(--cream-65);
+  font-size: clamp(13px,2vw,15px);
+  color: rgba(240,228,198,0.6);
+  line-height: 1.7;
+  max-width: 540px;
   border-left: 2px solid var(--gold);
   padding-left: 18px;
-  line-height: 1.70;
-  max-width: 600px;
 }
 
-/* ─── SECTION ─── */
-.section {
-  background: var(--green-mid);
-  border-radius: 8px;
-  padding: 34px 40px;
-  margin-bottom: 14px;
+.gold-rule {
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-l) 50%, transparent 100%);
 }
 
+/* ── CONTENT ── */
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(32px,5vw,56px) clamp(16px,4vw,40px) 72px;
+}
+
+/* ── SECTION HEADERS ── */
 .sec-label {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 10px;
   letter-spacing: 5px;
-  color: rgba(200,124,44,0.55);
-  margin-bottom: 5px;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 8px;
 }
 
 .sec-title {
   font-family: 'Playfair Display', serif;
-  font-size: 26px;
+  font-size: clamp(20px,3vw,26px);
   font-weight: 700;
-  color: var(--cream);
-  line-height: 1.1;
-  margin-bottom: 22px;
-  padding-bottom: 16px;
-  border-bottom: 0.5px solid var(--gold-dim);
-}
-
-.body {
-  font-family: 'Jost', sans-serif;
-  font-size: 14px;
-  color: var(--cream-65);
-  line-height: 1.75;
-  margin-bottom: 22px;
-}
-
-.body strong { color: var(--cream); font-weight: 600; }
-.body:last-child { margin-bottom: 0; }
-
-/* ─── NORTH STAR ─── */
-.north-star {
-  border: 1.5px solid var(--gold);
-  border-radius: 6px;
-  padding: 22px 28px;
-  background: var(--gold-faint);
-  text-align: center;
-  margin-bottom: 26px;
-}
-
-.ns-label {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: var(--gold);
-  margin-bottom: 8px;
-}
-
-.ns-main {
-  font-family: 'Playfair Display', serif;
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--cream);
-  line-height: 1.35;
-  margin-bottom: 8px;
-}
-
-.ns-sub {
-  font-size: 13px;
-  color: var(--cream-45);
-  line-height: 1.65;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* ─── STAT ROW ─── */
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 26px;
-}
-
-.stat-card {
-  background: var(--green-light);
-  border: 0.5px solid var(--cream-10);
-  border-radius: 6px;
-  padding: 16px 18px;
-}
-
-.stat-lbl {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--cream-45);
-  margin-bottom: 7px;
-}
-
-.stat-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--cream);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.stat-note {
-  font-size: 11.5px;
-  color: var(--cream-45);
-  line-height: 1.5;
-}
-
-/* ─── MIX BARS ─── */
-.mix-section { margin-bottom: 26px; }
-
-.mix-heading {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--cream-45);
-  margin-bottom: 14px;
-}
-
-.mix-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 10px;
-}
-
-.mix-lbl {
-  font-size: 12.5px;
-  color: var(--cream-65);
-  width: 185px;
-  flex-shrink: 0;
-  line-height: 1.3;
-}
-
-.mix-track {
-  flex: 1;
-  height: 6px;
-  background: var(--cream-10);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.mix-fill { height: 100%; border-radius: 3px; }
-
-.mix-pct {
-  font-size: 11px;
-  color: var(--cream-25);
-  width: 30px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-/* ─── CONSTRAINT BOX ─── */
-.constraint {
-  background: var(--gold-faint);
-  border: 1px solid var(--gold-dim);
-  border-radius: 8px;
-  padding: 24px 28px;
-  margin-bottom: 14px;
-}
-
-.constraint-lbl {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 10px;
-  letter-spacing: 4px;
-  color: var(--gold);
+  color: var(--ink);
   margin-bottom: 16px;
+  line-height: 1.2;
 }
 
-.c-math {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
-}
+.sec-title em { font-style: italic; color: var(--gl); }
 
-.c-item { text-align: center; }
-
-.c-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--cream);
-  line-height: 1;
-  margin-bottom: 5px;
-}
-
-.c-num.gold { color: var(--gold); }
-
-.c-desc {
-  font-size: 10px;
-  color: var(--cream-45);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  line-height: 1.45;
-}
-
-.c-op {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: rgba(200,124,44,0.4);
-  text-align: center;
-}
-
-.c-note {
-  font-family: 'Playfair Display', serif;
+.sec-intro {
   font-size: 14px;
-  font-style: italic;
-  color: var(--cream-65);
-  line-height: 1.65;
+  color: #2a3a2c;
+  line-height: 1.75;
+  max-width: 680px;
+  margin-bottom: 28px;
 }
 
-.footnote {
-  font-size: 11px;
-  color: var(--cream-25);
-  font-style: italic;
-  margin-top: 10px;
+/* ── CALLOUT ── */
+.callout {
+  background: var(--gd);
+  color: #F0E4C6;
+  border-left: 3px solid var(--gold);
+  padding: 22px 26px;
+  margin-bottom: 40px;
+  border-radius: 0 4px 4px 0;
 }
 
-/* ─── STREAM BLOCKS ─── */
-.stream {
-  border-left: 3px solid var(--cream-10);
-  padding-left: 22px;
-  margin-bottom: 30px;
+.callout p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #EDE3CC;
 }
 
-.stream:last-child { margin-bottom: 0; }
-.stream.s-active  { border-left-color: var(--sage); }
-.stream.s-build   { border-left-color: var(--gold); }
-.stream.s-caution { border-left-color: #C87C2C; }
-.stream.s-future  { border-left-color: var(--cream-25); }
+.callout strong { color: var(--gold); }
 
-.stream-top {
-  display: flex;
-  align-items: baseline;
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 44px 0;
+}
+
+/* ── FOUR BUCKETS ── */
+.bucket-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-bottom: 9px;
-  flex-wrap: wrap;
+  margin-bottom: 44px;
 }
 
-.stream-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--cream);
+@media(max-width:580px){ .bucket-grid { grid-template-columns: 1fr; } }
+
+.bucket {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gm);
+  border-radius: 0 0 4px 4px;
+  padding: 20px 22px;
 }
 
-.badge {
+.bucket.gold-top { border-top-color: var(--gold); background: #fdfaf4; }
+
+.bucket-letter {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 9px;
+  font-size: 28px;
+  color: var(--gm);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.bucket.gold-top .bucket-letter { color: var(--gold); }
+
+.bucket-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
   letter-spacing: 3px;
-  padding: 3px 9px;
-  border-radius: 3px;
-}
-
-.b-active  { background: var(--sage-dim);   color: var(--sage);      border: 0.5px solid rgba(74,158,114,0.35); }
-.b-build   { background: var(--amber-dim);  color: var(--gold);      border: 0.5px solid rgba(200,124,44,0.3); }
-.b-caution { background: rgba(200,100,60,0.15); color: #E0905A;      border: 0.5px solid rgba(200,100,60,0.35); }
-.b-future  { background: var(--cream-10);   color: var(--cream-45);  border: 0.5px solid var(--cream-10); }
-
-.stream-body {
-  font-size: 13.5px;
-  color: var(--cream-65);
-  line-height: 1.72;
-  margin-bottom: 11px;
-}
-
-.stream-body strong { color: var(--cream); font-weight: 600; }
-
-.stream-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tag {
-  font-size: 11.5px;
-  color: var(--cream-45);
-  background: var(--cream-10);
-  border: 0.5px solid rgba(240,228,198,0.09);
-  border-radius: 3px;
-  padding: 4px 11px;
-}
-
-.flag-box {
-  background: rgba(200,100,60,0.10);
-  border: 0.5px solid rgba(200,100,60,0.3);
-  border-radius: 5px;
-  padding: 10px 14px;
-  margin-top: 10px;
-  font-size: 12.5px;
-  color: rgba(240,200,160,0.75);
-  line-height: 1.55;
-}
-
-.flag-box strong { color: rgba(240,200,160,0.95); font-weight: 600; }
-
-.priority-wrap {
-  background: var(--gold-faint);
-  border: 1px solid rgba(200,124,44,0.28);
-  border-radius: 7px;
-  padding: 20px 24px;
-  margin-bottom: 30px;
-}
-
-.priority-flag {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 9px;
-  letter-spacing: 4px;
-  color: var(--gold);
+  color: var(--ink);
   margin-bottom: 12px;
 }
 
-/* ─── QUESTIONS ─── */
-.q-block {
-  border-bottom: 0.5px solid var(--cream-10);
-  padding-bottom: 22px;
-  margin-bottom: 22px;
+.bucket-streams {
+  list-style: none;
+  margin-bottom: 14px;
 }
 
-.q-block:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.bucket-streams li {
+  font-size: 13px;
+  color: #2a3a2c;
+  padding: 3px 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.bdot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.bucket-tag {
+  display: inline-block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 4px 9px;
+  border-radius: 2px;
+  background: var(--gm);
+  color: #F0E4C6;
+}
+
+.bucket.gold-top .bucket-tag { background: var(--gold); }
+
+/* ── STREAMS ── */
+.stream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 44px;
+}
+
+.stream {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stream-hdr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  flex-wrap: wrap;
+  user-select: none;
+}
+
+.stream-hdr:hover { background: #fafdf9; }
+
+.stream-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--gl);
+  min-width: 28px;
+  line-height: 1;
+}
+
+.stream-info { flex: 1; min-width: 160px; }
+
+.stream-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.stream-sub {
+  font-size: 11px;
+  color: #3a4e3c;
+  line-height: 1.4;
+}
+
+.s-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.sb-protect { background: #e8f0e9; color: #2A5433; }
+.sb-build   { background: #fdf3e3; color: #B86E24; }
+.sb-flag    { background: #fdeaea; color: #a03030; }
+.sb-formal  { background: #eaeffd; color: #2c5fb0; }
+.sb-future  { background: #f0f0f0; color: #555; }
+
+.stream-toggle {
+  font-size: 12px;
+  color: #555;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.stream-body {
+  padding: 0 20px 18px 64px;
+  border-top: 1px solid #f0f0ec;
+  display: none;
+}
+
+@media(max-width:580px){ .stream-body { padding: 0 16px 16px 16px; } }
+
+.stream.open .stream-body { display: block; }
+
+.stream-obs {
+  font-size: 13.5px;
+  color: #2a3a2c;
+  line-height: 1.75;
+  margin: 14px 0 12px;
+}
+
+.stream-obs strong { color: #0F1F12; }
+
+.stream-qs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stream-q {
+  display: flex;
+  gap: 9px;
+  font-size: 12.5px;
+  color: #3a4e3c;
+  line-height: 1.5;
+}
+
+.sq-arr { color: var(--gold); flex-shrink: 0; }
+
+.ubit-box {
+  background: #fff8e6;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin: 12px 0;
+}
+
+.ubit-lbl {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.ubit-box p {
+  font-size: 12.5px;
+  color: #5a4820;
+  line-height: 1.65;
+}
+
+.ubit-box strong { color: #3a2a10; }
+
+/* ── SCENARIO SECTION ── */
+.scenario-intro {
+  font-size: 14px;
+  color: #2a3a2c;
+  line-height: 1.75;
+  max-width: 680px;
+  margin-bottom: 36px;
+}
+
+.scenario-wrap {
+  margin-bottom: 48px;
+}
+
+.scenario-chart-area {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 1fr 1fr;
+  gap: 0;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+@media(max-width:500px){
+  .scenario-chart-area { grid-template-columns: 32px 1fr 1fr 1fr 1fr; }
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  padding: 0;
+  align-items: flex-end;
+  padding-right: 8px;
+}
+
+.y-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #3a4a3c;
+  line-height: 1;
+}
+
+.chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.chart-stack-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 120px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.target-line {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  border-top: 2px dashed var(--gold);
+  z-index: 10;
+}
+
+.target-label {
+  position: absolute;
+  right: -4px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  white-space: nowrap;
+  transform: translateY(-14px);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.stack-seg {
+  width: 100%;
+  position: relative;
+  transition: opacity 0.2s;
+  min-height: 2px;
+}
+
+.stack-seg:hover { opacity: 0.85; }
+
+.stack-seg .seg-tip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.stack-seg:hover .seg-tip { display: block; }
+
+.col-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.col-total {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+}
+
+.col-unlocks {
+  font-size: 11px;
+  color: #2a3a2c;
+  text-align: center;
+  line-height: 1.4;
+  max-width: 100px;
+  padding: 0 4px;
+}
+
+.scenario-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #2a3a2c;
+}
+
+.leg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── TRAILBLAZERS GRID ── */
+.tb-wrap {
+  margin-bottom: 48px;
+}
+
+.tb-callout {
+  background: #fdf3e3;
+  border-left: 3px solid var(--gold);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 0 4px 4px 0;
+  font-size: 13.5px;
+  color: #2a3a2c;
+  line-height: 1.7;
+}
+
+.tb-callout strong { color: #0F1F12; }
+
+.tb-grid-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tb-grid {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 420px;
+  font-size: 13px;
+}
+
+.tb-grid th {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  padding: 10px 14px;
+  text-align: center;
+  font-weight: 400;
+  background: var(--gd);
+  color: #F0E4C6;
+}
+
+.tb-grid th.row-hdr { text-align: left; }
+
+.tb-grid td {
+  padding: 12px 14px;
+  text-align: center;
+  border: 1px solid var(--border);
+  font-weight: 500;
+  line-height: 1;
+  position: relative;
+}
+
+.tb-grid td.row-hdr {
+  text-align: left;
+  background: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.tb-grid td .cell-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.tb-grid td .cell-sub {
+  font-size: 10px;
+  display: block;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+/* Cell color tiers based on % of $160K goal */
+.c0 { background: #f5faf6; color: #3a4a3c; } /* < 5% */
+.c1 { background: #d6ead9; color: #2A5433; } /* 5-15% */
+.c2 { background: #a8d4b0; color: #1E3D24; } /* 15-30% */
+.c3 { background: #5a9e72; color: #fff; }    /* 30-60% */
+.c4 { background: #2D6A4F; color: #fff; }    /* > 60% */
+
+.tb-note {
+  font-size: 11.5px;
+  color: #3a4e3c;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.tb-threshold {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.tb-th-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  color: #2a3a2c;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 10px;
+}
+
+/* ── QUESTIONS SECTION ── */
+.q-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 44px;
+}
+
+.q-item {
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+}
+
+.q-item:last-child { border-bottom: none; }
 
 .q-num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 10px;
   letter-spacing: 4px;
-  color: rgba(200,124,44,0.5);
+  color: rgba(200,124,44,0.6);
   margin-bottom: 4px;
 }
 
@@ -439,34 +719,34 @@ body {
   font-family: 'Playfair Display', serif;
   font-size: 17px;
   font-weight: 700;
-  color: var(--cream);
-  line-height: 1.2;
+  color: var(--ink);
   margin-bottom: 8px;
+  line-height: 1.2;
 }
 
 .q-body {
   font-size: 13.5px;
-  color: var(--cream-65);
+  color: #2a3a2c;
   line-height: 1.72;
 }
 
-.q-body strong { color: rgba(240,228,198,0.85); font-weight: 500; }
+.q-body strong { color: #0F1F12; font-weight: 600; }
 
-/* ─── WHITEBOARD BOX ─── */
-.wb-box {
-  background: var(--green-light);
-  border: 0.5px solid var(--cream-10);
+/* ── WHITEBOARD BOX ── */
+.wb {
+  background: var(--gd);
+  color: #F0E4C6;
   border-radius: 6px;
-  padding: 22px 26px;
-  margin-top: 28px;
+  padding: 26px 30px;
+  margin-bottom: 44px;
 }
 
-.wb-label {
+.wb-lbl {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 10px;
-  letter-spacing: 4px;
-  color: rgba(200,124,44,0.65);
-  margin-bottom: 14px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  margin-bottom: 16px;
 }
 
 .wb-list {
@@ -478,7 +758,7 @@ body {
 
 .wb-list li {
   font-size: 13.5px;
-  color: var(--cream-65);
+  color: rgba(240,228,198,0.75);
   line-height: 1.55;
   padding-left: 20px;
   position: relative;
@@ -489,425 +769,747 @@ body {
   position: absolute;
   left: 0;
   color: var(--gold);
-  font-size: 13px;
 }
 
-/* ─── FOOTER ─── */
+/* ── NEXT STEPS ── */
+.next-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 44px;
+}
+
+@media(max-width:580px){ .next-grid { grid-template-columns: 1fr; } }
+
+.next-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 22px;
+  position: relative;
+}
+
+.next-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: #C8D8CA;
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  line-height: 1;
+}
+
+.next-time {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.next-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.3;
+  max-width: 80%;
+}
+
+.next-body {
+  font-size: 13px;
+  color: #2a3a2c;
+  line-height: 1.7;
+}
+
+.next-owner {
+  margin-top: 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #4a5e4c;
+}
+
+/* ── FOOTER ── */
 .doc-footer {
+  background: var(--gd);
+  padding: 26px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 4px 0;
-  border-top: 0.5px solid rgba(200,124,44,0.2);
-  margin-top: 6px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .footer-left {
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 11px;
-  color: var(--cream-25);
+  letter-spacing: 3px;
+  color: rgba(240,228,198,0.35);
   line-height: 1.6;
 }
 
 .footer-right {
-  font-size: 11px;
-  color: var(--cream-25);
   text-align: right;
+  font-size: 12px;
+  color: rgba(240,228,198,0.4);
   line-height: 1.6;
 }
 
-/* ─── PRINT STYLES ─── */
+/* ── PRINT ── */
 @media print {
-  body {
-    background: #ffffff;
-    color: #1A1A1A;
-    padding: 0;
-    font-size: 12px;
-  }
-
-  .doc { max-width: 100%; }
-
-  .cover,
-  .section {
-    background: #ffffff;
-    border-radius: 0;
-    padding: 24px 0;
-    margin-bottom: 0;
-    border-left: none;
-    border-bottom: 1px solid #ddd;
-    page-break-inside: avoid;
-  }
-
-  .cover { border-left: 4px solid #C87C2C; padding-left: 20px; }
-
-  .cover-title,
-  .sec-title,
-  .ns-main,
-  .stream-name,
-  .q-text,
-  .stat-val { color: #1A1A1A; }
-
-  .eyebrow,
-  .sec-label,
-  .ns-label,
-  .constraint-lbl,
-  .priority-flag,
-  .wb-label,
-  .q-num,
-  .badge { color: #C87C2C; }
-
-  .cover-intro,
-  .body,
-  .stream-body,
-  .c-note,
-  .q-body,
-  .ns-sub,
-  .stat-note,
-  .mix-lbl,
-  .wb-list li { color: #333333; }
-
-  .cover-sub { color: #888; }
-
-  .north-star,
-  .constraint,
-  .priority-wrap {
-    background: #FFF8F0;
-    border: 1px solid #C87C2C;
-  }
-
-  .stat-card,
-  .wb-box { background: #f7f7f7; border: 0.5px solid #ddd; }
-
-  .stream { border-left-color: #C87C2C !important; }
-
-  .mix-track { background: #eee; }
-  .tag { background: #f0f0f0; color: #444; border-color: #ddd; }
-
-  .flag-box { background: #FFF3EE; border-color: #E07040; color: #7A3010; }
-
-  .doc-footer { border-top: 1px solid #ddd; }
-  .footer-left, .footer-right { color: #888; }
-
-  .c-num, .c-op { color: #1A1A1A; }
-  .c-num.gold { color: #C87C2C; }
-  .c-desc { color: #666; }
+  .stream-body { display: block !important; }
+  .stream-toggle { display: none; }
+  .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .gold-rule { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .callout,.wb,.doc-footer,.bucket-tag,.s-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .stack-seg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tb-grid th,.c0,.c1,.c2,.c3,.c4 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 13px; }
 }
-
 </style>
 </head>
 <body>
-<div class="doc">
 
-  <!-- COVER -->
-  <div class="cover">
-    <div class="eyebrow">Hike &amp; Hit &nbsp;—&nbsp; Internal Strategy Brief</div>
-    <div class="cover-title">H&amp;H Revenue and Funding Architecture</div>
-    <div class="cover-sub">Prepared for Whiteboard Planning Session</div>
-    <div class="cover-intro">
-      This brief grew out of our recent conversation about mapping H&amp;H's revenue streams. It organizes what we discussed, adds context to each mechanism, surfaces the structural questions underneath, and sets the agenda for a deeper planning session. It doesn't have a plan at the end. It has the map needed to build one together.
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-pattern"></div>
+  <div class="cover-top">
+    <div>
+      <div class="cover-org">Hike &amp; Hit</div>
+      <div class="cover-org-name">Internal Strategy Brief</div>
+    </div>
+    <div class="cover-meta">
+      <strong>Prepared for</strong>
+      Whiteboard Planning Session<br>
+      <span style="font-size:11px;color:rgba(240,228,198,0.3)">Confidential</span>
+    </div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-eyebrow">Revenue and Funding Architecture</div>
+    <h1 class="cover-title">Building the foundation<br>the mission <em>demands.</em></h1>
+    <p class="cover-intro">This brief grew out of our conversation about mapping H&amp;H's revenue streams and turns that thinking into a map we can build strategy from together.</p>
+  </div>
+</div>
+<div class="gold-rule"></div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SECTION 1: MISSION CONTEXT -->
+  <span class="sec-label">Strategic Context</span>
+  <h2 class="sec-title">Where H&amp;H stands - <em>and what it requires.</em></h2>
+  <p class="sec-intro">Most nonprofits at this stage are running on one or two revenue streams. H&amp;H has six. That's a genuine strength. It's also a signal that the org has outgrown an informal approach to revenue management. The opportunity isn't to add more streams - it's to understand what each one does and doesn't unlock, and sequence them toward a model that actually sustains the mission long-term.</p>
+
+  <div class="callout">
+    <p>The question this brief is designed to surface is not about money. It's about mission reach. <strong>How far can H&amp;H go if José and Nate remain in their current operating position?</strong> And what becomes possible when they don't have to be? The answer to that question is what the whiteboard meeting is for.</p>
+  </div>
+
+  <!-- STRUCTURAL CONSTRAINT -->
+  <span class="sec-label">The Structural Constraint</span>
+  <h2 class="sec-title">The ceiling the current<br><em>funding model creates.</em></h2>
+
+  <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:28px 30px;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;margin-bottom:22px;">
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,32px);font-weight:900;color:var(--ink);line-height:1;margin-bottom:5px;">~$170K</div>
+        <div style="font-size:10px;color:#3a4e3c;text-transform:uppercase;letter-spacing:1px;line-height:1.4;">Total annual<br>revenue</div>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:#ccc;text-align:center;">vs.</div>
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,32px);font-weight:900;color:var(--gold);line-height:1;margin-bottom:5px;">$160K</div>
+        <div style="font-size:10px;color:#3a4e3c;text-transform:uppercase;letter-spacing:1px;line-height:1.4;">Full-time founder<br>cost (working figure)*</div>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:#ccc;text-align:center;">=</div>
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,32px);font-weight:900;color:var(--ink);line-height:1;margin-bottom:5px;">$10K</div>
+        <div style="font-size:10px;color:#3a4e3c;text-transform:uppercase;letter-spacing:1px;line-height:1.4;">Left for programs,<br>staff, overhead</div>
+      </div>
+    </div>
+    <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#2a3a2c;line-height:1.65;border-left:2px solid var(--gold);padding-left:16px;">At current revenue levels, paying both founders to lead full-time would consume nearly the entire operating budget. This is not a criticism of how H&amp;H is run. It's the ceiling the current funding model creates. The mission grows when the ceiling does.</p>
+  </div>
+  <p style="font-size:11px;color:#3a4e3c;font-style:italic;margin-bottom:44px;">* $80K per founder used as a working figure for this brief. Confirm or adjust at the whiteboard meeting.</p>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 2: FOUR BUCKETS -->
+  <span class="sec-label">Revenue Landscape</span>
+  <h2 class="sec-title">Four buckets. <em>One framework.</em></h2>
+  <p class="sec-intro">H&amp;H's revenue streams map into four categories. Each has a different function, a different risk profile, and a different strategic priority. Understanding the buckets before the streams makes the detail easier to navigate.</p>
+
+  <div class="bucket-grid">
+    <div class="bucket gold-top">
+      <div class="bucket-letter">A</div>
+      <div class="bucket-name">Earned Revenue</div>
+      <ul class="bucket-streams">
+        <li><span class="bdot"></span>School and program contracts</li>
+        <li><span class="bdot"></span>Staff development and workshops</li>
+        <li><span class="bdot"></span>Creative services (future)</li>
+      </ul>
+      <span class="bucket-tag">Protect + Grow</span>
+    </div>
+    <div class="bucket">
+      <div class="bucket-letter">B</div>
+      <div class="bucket-name">Community Revenue</div>
+      <ul class="bucket-streams">
+        <li><span class="bdot"></span>Trailblazers monthly donors</li>
+        <li><span class="bdot"></span>Individual community giving</li>
+      </ul>
+      <span class="bucket-tag">Build Now</span>
+    </div>
+    <div class="bucket">
+      <div class="bucket-letter">C</div>
+      <div class="bucket-name">Institutional Funding</div>
+      <ul class="bucket-streams">
+        <li><span class="bdot"></span>Program grants (Golden 1, Sutter)</li>
+        <li><span class="bdot"></span>Capacity-building grants</li>
+        <li><span class="bdot"></span>Federal and state funding</li>
+      </ul>
+      <span class="bucket-tag">Shift the Mix</span>
+    </div>
+    <div class="bucket">
+      <div class="bucket-letter">D</div>
+      <div class="bucket-name">Partnerships + Capital</div>
+      <ul class="bucket-streams">
+        <li><span class="bdot"></span>Auburn AleHouse and brand partnerships</li>
+        <li><span class="bdot"></span>Long-term site acquisition</li>
+      </ul>
+      <span class="bucket-tag">Formalize + Plan</span>
     </div>
   </div>
 
-  <!-- SECTION 1 -->
-  <div class="section">
-    <div class="sec-label">Section One</div>
-    <div class="sec-title">The Mission and What It Requires</div>
+  <!-- STREAMS -->
+  <span class="sec-label">Stream-by-Stream Analysis</span>
+  <h2 class="sec-title">What's working, what needs attention, <em>and what needs a conversation.</em></h2>
+  <p class="sec-intro">Each stream has its own status, strategic logic, and set of open questions. Tap any stream to read the detail.</p>
 
-    <div class="north-star">
-      <div class="ns-label">What We Are Building Toward</div>
-      <div class="ns-main">More kids served. More communities reached.<br>H&amp;H operating at the scale its mission demands.</div>
-      <div class="ns-sub">That doesn't happen while José and Nate are splitting their time between delivering programs and leading an organization. The mission requires builders at the top, not just deliverers in the field.</div>
-    </div>
+  <div class="stream-list">
 
-    <div class="body">
-      H&amp;H is doing something real. The programs work, the relationships are strong, and the community trust has been earned. That is not the problem. The structural problem is this: <strong>H&amp;H is currently funded to run programs, not to build an organization.</strong> Every dollar coming in is spoken for by program delivery. There is no slack for the leadership capacity, systems, or infrastructure that would allow H&amp;H to reach more kids in more places.
-    </div>
-
-    <div class="body">
-      The question this brief is designed to surface is not about money. It is about mission reach. <strong>How far can H&amp;H go if José and Nate remain in their current operating position?</strong> And what becomes possible if they don't have to be?
-    </div>
-
-    <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-lbl">Annual Revenue</div>
-        <div class="stat-val">~$170K</div>
-        <div class="stat-note">Working figure. Exact financials to be confirmed at meeting.</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Grant-Funded Revenue</div>
-        <div class="stat-val">60%</div>
-        <div class="stat-note">Mostly restricted to program delivery. Cannot fund org-building.</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Fully Controlled Revenue</div>
-        <div class="stat-val">~20%</div>
-        <div class="stat-note">Fee-for-service contracts. The only money H&amp;H deploys freely.</div>
-      </div>
-    </div>
-
-    <div class="mix-section">
-      <div class="mix-heading">Current Revenue Mix</div>
-      <div class="mix-row">
-        <div class="mix-lbl">Grants (program delivery)</div>
-        <div class="mix-track"><div class="mix-fill" style="width:60%;background:#4A9E72"></div></div>
-        <div class="mix-pct">60%</div>
-      </div>
-      <div class="mix-row">
-        <div class="mix-lbl">Fee-for-service contracts</div>
-        <div class="mix-track"><div class="mix-fill" style="width:20%;background:#C87C2C"></div></div>
-        <div class="mix-pct">20%</div>
-      </div>
-      <div class="mix-row">
-        <div class="mix-lbl">Brand partnerships / sponsorships</div>
-        <div class="mix-track"><div class="mix-fill" style="width:10%;background:rgba(240,228,198,0.35)"></div></div>
-        <div class="mix-pct">~10%</div>
-      </div>
-      <div class="mix-row">
-        <div class="mix-lbl">Individual giving</div>
-        <div class="mix-track"><div class="mix-fill" style="width:5%;background:rgba(240,228,198,0.2)"></div></div>
-        <div class="mix-pct">~5%</div>
-      </div>
-      <div class="mix-row">
-        <div class="mix-lbl">In-kind / other</div>
-        <div class="mix-track"><div class="mix-fill" style="width:5%;background:rgba(240,228,198,0.12)"></div></div>
-        <div class="mix-pct">~5%</div>
-      </div>
-    </div>
-
-    <div class="constraint">
-      <div class="constraint-lbl">The Structural Constraint</div>
-      <div class="c-math">
-        <div class="c-item">
-          <div class="c-num">~$170K</div>
-          <div class="c-desc">Total annual revenue</div>
+    <!-- 01 Contracts -->
+    <div class="stream open">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">01</div>
+        <div class="stream-info">
+          <div class="stream-name">School and Program Contracts</div>
+          <div class="stream-sub">TRUSD · NUSD ELOP · CCCA Sports Academy → SCUSD, EGUSD</div>
         </div>
-        <div class="c-op">vs.</div>
-        <div class="c-item">
-          <div class="c-num gold">$160K</div>
-          <div class="c-desc">Cost of two full-time founders*</div>
-        </div>
-        <div class="c-op">=</div>
-        <div class="c-item">
-          <div class="c-num">$10K</div>
-          <div class="c-desc">Remaining for programs, staff, overhead</div>
+        <span class="s-badge sb-protect">Protect + Expand</span>
+        <span class="stream-toggle">▲</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">This is the load-bearing revenue - reliable, high-value, and repeatable. The TRUSD contract at $105K is the current anchor. <strong>This is the only money H&amp;H fully controls</strong>: no application cycle, no funder approval, no restricted use. Growing this tier through SCUSD and EGUSD is the most direct path to unrestricted revenue. The strategic priority isn't just doing great work and hoping contracts renew - it's building a pipeline and expansion system so growth happens by design.</p>
+        <div class="stream-qs">
+          <div class="stream-q"><span class="sq-arr">→</span><span>What are the renewal timelines for each active contract and who owns each relationship?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a documented outreach pathway for SCUSD and EGUSD?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a path to a larger TRUSD contract or a staff development add-on before May 2026 expiration?</span></div>
         </div>
       </div>
-      <div class="c-note">
-        At current revenue levels, paying both founders to lead full-time would consume nearly the entire operating budget. This is not a criticism of how H&amp;H is run. It is the ceiling the current funding model creates. The mission grows when the ceiling does.
-      </div>
-      <div class="footnote">* $80K per founder used as a working figure. Confirm or adjust at the meeting.</div>
     </div>
+
+    <!-- 02 Trailblazers -->
+    <div class="stream open">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">02</div>
+        <div class="stream-info">
+          <div class="stream-name">Trailblazers Club</div>
+          <div class="stream-sub">Monthly recurring donors · Community sustainability engine</div>
+        </div>
+        <span class="s-badge sb-build">Build and Scale</span>
+        <span class="stream-toggle">▲</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">Monthly recurring giving is <strong>the most sustainable community revenue an org can build</strong>. It compounds over time, runs independent of grant cycles, and grows with storytelling and community connection. Trailblazers Club is the right vehicle - it likely punches below its weight right now not because of weak community loyalty, but because there's no formal stewardship structure yet. This stream needs a launch plan, a donor journey, and consistency before it can scale. See the scenario grid below for what it can produce.</p>
+        <div class="stream-qs">
+          <div class="stream-q"><span class="sq-arr">→</span><span>How many active Trailblazers currently? What is the average monthly gift?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a donor welcome sequence, impact update, and renewal touchpoint?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Who owns donor communications and how often do they go out?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Grants -->
+    <div class="stream open">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">03</div>
+        <div class="stream-info">
+          <div class="stream-name">Grants and Institutional Funding</div>
+          <div class="stream-sub">Golden 1 · Sutter · OJJDP · CNRA · Capacity-Building Pipeline</div>
+        </div>
+        <span class="s-badge sb-build">Shift the Mix</span>
+        <span class="stream-toggle">▲</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">H&amp;H has an active grants pipeline. The critical shift is in <strong>what kinds of grants are being pursued</strong>. Program grants fund program delivery but cannot fund the org. <strong>Capacity-building grants and general operating support grants are the missing layer</strong> - they fund staff, infrastructure, leadership, and systems. Activating this grant category is the most direct route to closing the structural gap. The pipeline needs to shift from reactive (apply when you hear about it) to prospective (12-month calendar, pre-built outcome data, active funder relationships).</p>
+        <div class="stream-qs">
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a 12-month grant calendar with submission and reporting dates?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Are program outcomes tracked in a format that maps to what funders ask for?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Which capacity-building funders are the right fit for H&amp;H's stage and geography?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Brand Partnerships -->
+    <div class="stream">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">04</div>
+        <div class="stream-info">
+          <div class="stream-name">Brand Partnerships and Sponsorships</div>
+          <div class="stream-sub">Auburn AleHouse · Old Trapper · Kühl · Branded Bills</div>
+        </div>
+        <span class="s-badge sb-formal">Formalize</span>
+        <span class="stream-toggle">▼</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">H&amp;H has active brand relationships with real visibility and community reach. Auburn AleHouse is the most developed - a co-branded beer with three more releases in progress and event partnerships that extend the mission into community spaces. Old Trapper, Kühl, and Branded Bills are active partners as well. <strong>The strategic question is what the actual revenue structure looks like for each.</strong> Are these producing cash revenue, in-kind product, or exposure? The answer determines how they fit into the sustainability strategy and whether the AleHouse model can be replicated.</p>
+        <div class="ubit-box">
+          <div class="ubit-lbl">Revenue Clarity Needed</div>
+          <p>For each active partnership: what is <strong>cash revenue</strong>, what is <strong>in-kind product</strong>, and what is <strong>exposure value</strong>? These are different things with different strategic implications. Cash closes the gap. In-kind reduces costs. Exposure builds the brand. All three matter - but only cash revenue can pay for operations.</p>
+        </div>
+        <div class="stream-qs" style="margin-top:12px">
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is the Auburn AleHouse arrangement documented with a formal revenue-sharing agreement?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>How does partnership revenue currently appear in H&amp;H's financials?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Are there more community businesses that could come in under a similar structure?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Staff Development -->
+    <div class="stream">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">05</div>
+        <div class="stream-info">
+          <div class="stream-name">Staff Development and Workshops</div>
+          <div class="stream-sub">Training · Wellness · Team-Building · Club Teams</div>
+        </div>
+        <span class="s-badge sb-build">Proof of Concept - Scale It</span>
+        <span class="stream-toggle">▼</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">One staff development day at TRUSD is a proof of concept with an existing contract partner. <strong>This is the most mission-aligned earned income play on the list.</strong> Training, wellness, and leadership development extends H&amp;H's expertise beyond programming and creates a replicable service that districts and community organizations will pay for. With TRUSD already in the relationship, the upsell path is clear. The caution is not scaling prematurely before core infrastructure is solid.</p>
+        <div class="stream-qs">
+          <div class="stream-q"><span class="sq-arr">→</span><span>Has the TRUSD staff development day been evaluated? What was the response?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a pricing model and curriculum framework for future offerings?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Does current staffing support expanding this without diluting core contracts?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 Creative Services -->
+    <div class="stream">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">06</div>
+        <div class="stream-info">
+          <div class="stream-name">Creative Services</div>
+          <div class="stream-sub">Photography · Video · Event Media · Social Media Packages</div>
+        </div>
+        <span class="s-badge sb-flag">Future Play - Structural Review Required</span>
+        <span class="stream-toggle">▼</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">H&amp;H has built what is effectively an in-house media agency inside a 501(c)(3), with real brand relationships generating real creative output. <strong>The opportunity is significant. The structure requires thought.</strong> As a nonprofit, generating revenue from activities not substantially related to the exempt purpose can trigger Unrelated Business Income Tax (UBIT). Whether Creative Services is mission-adjacent enough to qualify as program-related income - or whether it needs a separate structure - is a question that needs legal and strategic clarity before it scales.</p>
+        <div class="ubit-box">
+          <div class="ubit-lbl">Structural Flag: UBIT</div>
+          <p>When a 501(c)(3) generates income from activities not substantially related to its exempt purpose, that income may be subject to <strong>Unrelated Business Income Tax</strong>. Options include documenting mission alignment clearly, exploring a social enterprise subsidiary LLC, or separating financial tracking. <strong>A nonprofit attorney or CPA should weigh in before this stream scales.</strong></p>
+        </div>
+        <div class="stream-qs" style="margin-top:12px">
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is content creation revenue currently tracked separately in H&amp;H's financials?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Has a nonprofit attorney reviewed UBIT exposure for this stream?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>How can this be structured to protect H&amp;H's tax-exempt status while capturing the revenue?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 Site Acquisition -->
+    <div class="stream">
+      <div class="stream-hdr" onclick="toggleStream(this)">
+        <div class="stream-num">07</div>
+        <div class="stream-info">
+          <div class="stream-name">Long-Term Capital - Site Acquisition</div>
+          <div class="stream-sub">SHRA · CDBG · LISC Sacramento · CDFIs · Surplus Property</div>
+        </div>
+        <span class="s-badge sb-future">Long-Term Play</span>
+        <span class="stream-toggle">▼</span>
+      </div>
+      <div class="stream-body">
+        <p class="stream-obs">A permanent facility in Del Paso Heights is a 3-to-5-year play that changes H&amp;H's cost structure, funder credibility, and community permanence simultaneously. <strong>Del Paso Heights' geography creates eligibility advantages most nonprofits don't have access to</strong> - CDBG funding through SHRA, CDFI financing through LISC Sacramento and Northern California Community Loan Fund, and potential access to surplus city or county property. Owning a facility reduces long-term program costs and signals to funders that H&amp;H is built to last. The groundwork starts now even though the timeline is long.</p>
+        <div class="stream-qs">
+          <div class="stream-q"><span class="sq-arr">→</span><span>Has H&amp;H explored SHRA's CDBG program for Del Paso Heights specifically?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>Is there a relationship with LISC Sacramento or N. CA Community Loan Fund?</span></div>
+          <div class="stream-q"><span class="sq-arr">→</span><span>What does a facility actually cost in the target area and what is the realistic timeline?</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end stream-list -->
+
+  <div class="divider"></div>
+
+  <!-- SECTION 3: WHAT-IF SCENARIOS -->
+  <span class="sec-label">What-If Scenarios</span>
+  <h2 class="sec-title">What different choices <em>actually produce.</em></h2>
+  <p class="scenario-intro">The map shows what exists. The scenarios show what different paths produce. Conservative, Moderate, and Ambitious pathways are modeled below alongside the current state, based on different combinations of stream activation. The founder sustainability target of $160K is shown as the benchmark. These are projections for planning purposes, not predictions.</p>
+
+  <!-- STACKED BLOCKS CHART -->
+  <div class="scenario-wrap">
+
+    <div class="scenario-chart-area">
+      <!-- Y Axis -->
+      <div class="chart-y-axis">
+        <div class="y-label">$500K</div>
+        <div class="y-label">$400K</div>
+        <div class="y-label">$300K</div>
+        <div class="y-label">$200K</div>
+        <div class="y-label">$100K</div>
+        <div class="y-label">$0</div>
+      </div>
+
+      <!-- Current State -->
+      <div class="chart-col">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#3a4e3c;text-align:center;margin-bottom:6px;">CURRENT</div>
+        <div class="chart-stack-wrap">
+          <!-- Target line at 160/500 = 32% from bottom = 68% from top -->
+          <div class="target-line" style="bottom: 96px;">
+            <span class="target-label">$160K FOUNDER TARGET</span>
+          </div>
+          <div class="stack">
+            <!-- Individual/other: $20K -->
+            <div class="stack-seg" style="height:12px;background:#9B8EA0;">
+              <span class="seg-tip">Other: ~$20K</span>
+            </div>
+            <!-- Grants: $45K -->
+            <div class="stack-seg" style="height:27px;background:#4A9E72;">
+              <span class="seg-tip">Program Grants: ~$45K</span>
+            </div>
+            <!-- Contracts: $105K -->
+            <div class="stack-seg" style="height:63px;background:#2D6A4F;">
+              <span class="seg-tip">Contracts: ~$105K</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-label" style="margin-top:8px;">Now</div>
+        <div class="col-total">~$170K</div>
+        <div class="col-unlocks" style="color:#c0392b;font-size:11px;font-weight:500;">Below founder target</div>
+      </div>
+
+      <!-- Conservative -->
+      <div class="chart-col">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#3a4e3c;text-align:center;margin-bottom:6px;">CONSERVATIVE</div>
+        <div class="chart-stack-wrap">
+          <div class="target-line" style="bottom: 96px;"></div>
+          <div class="stack">
+            <!-- Trailblazers: $15K -->
+            <div class="stack-seg" style="height:9px;background:#E0962E;">
+              <span class="seg-tip">Trailblazers: $15K</span>
+            </div>
+            <!-- Partnerships: $20K -->
+            <div class="stack-seg" style="height:12px;background:#7B9E87;">
+              <span class="seg-tip">Partnerships: $20K</span>
+            </div>
+            <!-- Program Grants: $50K -->
+            <div class="stack-seg" style="height:30px;background:#4A9E72;">
+              <span class="seg-tip">Program Grants: $50K</span>
+            </div>
+            <!-- Contracts: $125K -->
+            <div class="stack-seg" style="height:75px;background:#2D6A4F;">
+              <span class="seg-tip">Contracts: $125K</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-label" style="margin-top:8px;">Conservative</div>
+        <div class="col-total">~$210K</div>
+        <div class="col-unlocks">TRUSD renewed. Trailblazers launched. Partnerships formalized.</div>
+      </div>
+
+      <!-- Moderate -->
+      <div class="chart-col">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#3a4e3c;text-align:center;margin-bottom:6px;">MODERATE</div>
+        <div class="chart-stack-wrap">
+          <div class="target-line" style="bottom: 96px;"></div>
+          <div class="stack">
+            <!-- Trailblazers: $36K -->
+            <div class="stack-seg" style="height:22px;background:#E0962E;">
+              <span class="seg-tip">Trailblazers: $36K</span>
+            </div>
+            <!-- Partnerships: $25K -->
+            <div class="stack-seg" style="height:15px;background:#7B9E87;">
+              <span class="seg-tip">Partnerships: $25K</span>
+            </div>
+            <!-- Capacity Grants: $40K -->
+            <div class="stack-seg" style="height:24px;background:#C87C2C;">
+              <span class="seg-tip">Capacity Grants: $40K</span>
+            </div>
+            <!-- Program Grants: $65K -->
+            <div class="stack-seg" style="height:39px;background:#4A9E72;">
+              <span class="seg-tip">Program Grants: $65K</span>
+            </div>
+            <!-- Contracts: $155K -->
+            <div class="stack-seg" style="height:93px;background:#2D6A4F;">
+              <span class="seg-tip">Contracts: $155K</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-label" style="margin-top:8px;">Moderate</div>
+        <div class="col-total">~$321K</div>
+        <div class="col-unlocks">New district added. Capacity grants activated. 100 Trailblazers.</div>
+      </div>
+
+      <!-- Ambitious -->
+      <div class="chart-col">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#3a4e3c;text-align:center;margin-bottom:6px;">AMBITIOUS</div>
+        <div class="chart-stack-wrap">
+          <div class="target-line" style="bottom: 96px;"></div>
+          <div class="stack">
+            <!-- Staff Dev: $40K -->
+            <div class="stack-seg" style="height:24px;background:#9A5820;">
+              <span class="seg-tip">Staff Development: $40K</span>
+            </div>
+            <!-- Trailblazers: $72K -->
+            <div class="stack-seg" style="height:43px;background:#E0962E;">
+              <span class="seg-tip">Trailblazers: $72K</span>
+            </div>
+            <!-- Partnerships: $35K -->
+            <div class="stack-seg" style="height:21px;background:#7B9E87;">
+              <span class="seg-tip">Partnerships: $35K</span>
+            </div>
+            <!-- Capacity Grants: $65K -->
+            <div class="stack-seg" style="height:39px;background:#C87C2C;">
+              <span class="seg-tip">Capacity Grants: $65K</span>
+            </div>
+            <!-- Program Grants: $80K -->
+            <div class="stack-seg" style="height:48px;background:#4A9E72;">
+              <span class="seg-tip">Program Grants: $80K</span>
+            </div>
+            <!-- Contracts: $185K -->
+            <div class="stack-seg" style="height:111px;background:#2D6A4F;">
+              <span class="seg-tip">Contracts: $185K</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-label" style="margin-top:8px;">Ambitious</div>
+        <div class="col-total">~$477K</div>
+        <div class="col-unlocks">Full stack activated. Multiple districts. 200 Trailblazers. Staff dev scaled.</div>
+      </div>
+
+    </div><!-- end chart area -->
+
+    <div class="scenario-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#2D6A4F"></div>Contracts</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#4A9E72"></div>Program Grants</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#C87C2C"></div>Capacity Grants</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#E0962E"></div>Trailblazers</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#7B9E87"></div>Partnerships</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#9A5820"></div>Staff Development</div>
+      <div class="leg-item"><div class="leg-dot" style="border:2px dashed var(--gold);background:transparent;width:12px;height:12px;border-radius:0"></div>$160K Founder Target</div>
+    </div>
+
+  </div><!-- end scenario-wrap -->
+
+  <!-- TRAILBLAZERS GRID -->
+  <div class="tb-wrap">
+    <span class="sec-label">Trailblazers Club - Scenario Grid</span>
+    <h2 class="sec-title">What Trailblazers can produce <em>on its own.</em></h2>
+    <div class="tb-callout">
+      <strong>This single stream has transformational potential.</strong> The grid below shows annual revenue at different combinations of donor count and monthly gift amount. The cells are color-coded from light to dark based on how close they get to meaningful thresholds. Hover any cell for context. The goal isn't the biggest number - it's finding the realistic target and building toward it systematically.
+    </div>
+    <div class="tb-grid-wrap">
+      <table class="tb-grid">
+        <thead>
+          <tr>
+            <th class="row-hdr">Monthly Gift →<br>Donors ↓</th>
+            <th>$10 / mo</th>
+            <th>$25 / mo</th>
+            <th>$50 / mo</th>
+            <th>$75 / mo</th>
+            <th>$100 / mo</th>
+          </tr>
+        </thead>
+        <tbody id="tbBody"></tbody>
+      </table>
+    </div>
+    <div class="tb-threshold">
+      <div class="tb-th-item"><div class="leg-dot" style="width:10px;height:10px;border-radius:2px;background:#f5faf6;border:1px solid #ccc;flex-shrink:0"></div>Under $10K</div>
+      <div class="tb-th-item"><div class="leg-dot" style="width:10px;height:10px;border-radius:2px;background:#d6ead9;flex-shrink:0"></div>$10K–$25K</div>
+      <div class="tb-th-item"><div class="leg-dot" style="width:10px;height:10px;border-radius:2px;background:#a8d4b0;flex-shrink:0"></div>$25K–$50K</div>
+      <div class="tb-th-item"><div class="leg-dot" style="width:10px;height:10px;border-radius:2px;background:#5a9e72;flex-shrink:0"></div>$50K–$100K</div>
+      <div class="tb-th-item"><div class="leg-dot" style="width:10px;height:10px;border-radius:2px;background:#2D6A4F;flex-shrink:0"></div>$100K+</div>
+    </div>
+    <p class="tb-note">Annual revenue = donors × monthly gift × 12 months. Figures assume consistent donor retention. Even modest growth in average gift significantly compounds over time.</p>
   </div>
 
-  <!-- SECTION 2 -->
-  <div class="section">
-    <div class="sec-label">Section Two</div>
-    <div class="sec-title">The Full Revenue and Funding Landscape</div>
+  <div class="divider"></div>
 
-    <div class="body">
-      H&amp;H has six distinct revenue streams either active or available. Most organizations at this stage over-rely on one or two. Understanding what each mechanism does and does not unlock is the foundation of a strategy that can actually move the mission forward at scale.
-    </div>
+  <!-- SECTION 4: QUESTIONS -->
+  <span class="sec-label">Section Three</span>
+  <h2 class="sec-title">Questions to answer <em>together.</em></h2>
+  <p class="sec-intro">A real strategy for H&amp;H can only be built by the people who know the org, the community, and the mission. These are the questions that make the whiteboard conversation productive.</p>
 
-    <!-- Stream 1: Contracts -->
-    <div class="stream s-active">
-      <div class="stream-top">
-        <div class="stream-name">01 &nbsp; Contracts</div>
-        <span class="badge b-active">Active — Protect and Grow</span>
-      </div>
-      <div class="stream-body">
-        School and program contracts are the backbone of H&amp;H's earned income. <strong>This is the only revenue H&amp;H fully controls</strong> — no application cycle, no funder approval, no restricted use. The TRUSD contract at $105K is the current anchor. Growing this tier through new district relationships is the most direct path to unrestricted revenue. SCUSD and EGUSD are the next prospects.
-      </div>
-      <div class="stream-tags">
-        <span class="tag">TRUSD ($105K) ✓</span>
-        <span class="tag">NUSD ELOP ✓</span>
-        <span class="tag">CCCA Sports Academy ✓</span>
-        <span class="tag">SCUSD →</span>
-        <span class="tag">EGUSD →</span>
-      </div>
-    </div>
-
-    <!-- Stream 2: Trailblazers -->
-    <div class="stream s-build">
-      <div class="stream-top">
-        <div class="stream-name">02 &nbsp; Trailblazers Club</div>
-        <span class="badge b-build">Build and Scale</span>
-      </div>
-      <div class="stream-body">
-        Monthly recurring giving from individual donors. <strong>Recurring giving is the most sustainable community revenue an org can build</strong> — it compounds over time, runs independent of grant cycles, and grows with storytelling and community connection. Trailblazers Club is the right vehicle. It needs a launch plan, a donor cultivation strategy, and consistency. This is a Year 1 priority.
-      </div>
-      <div class="stream-tags">
-        <span class="tag">Monthly donor program →</span>
-        <span class="tag">Community perks and storytelling →</span>
-        <span class="tag">Long-term sustainability base →</span>
-      </div>
-    </div>
-
-    <!-- Stream 3: Grants - PRIORITY -->
-    <div class="priority-wrap">
-      <div class="priority-flag">The Missing Layer — Highest Strategic Priority</div>
-      <div class="stream s-build" style="border-left-color:#C87C2C;margin-bottom:0">
-        <div class="stream-top">
-          <div class="stream-name">03 &nbsp; Grants and Institutional Funding</div>
-          <span class="badge b-build">Active and Expand — Shift the Mix</span>
-        </div>
-        <div class="stream-body">
-          H&amp;H already has an active grants pipeline. The critical shift is in <strong>what kinds of grants are being pursued.</strong> Program grants — Golden 1, Sutter, foundations — fund program delivery but cannot fund the org. <strong>Capacity-building grants and general operating support grants are the missing layer.</strong> These fund staff, infrastructure, leadership, and systems. They are specifically designed to help organizations like H&amp;H build themselves, not just run programs. Activating this grant category is the most direct route to closing the structural gap.
-        </div>
-        <div class="stream-tags">
-          <span class="tag">Golden 1 Credit Union ✓</span>
-          <span class="tag">Sutter Health ✓</span>
-          <span class="tag">Capacity-building grants →</span>
-          <span class="tag">General operating support →</span>
-          <span class="tag">OJJDP (Federal) →</span>
-          <span class="tag">CNRA Outdoor Equity →</span>
-          <span class="tag">Sierra Health Foundation →</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stream 4: Partnerships -->
-    <div class="stream s-caution">
-      <div class="stream-top">
-        <div class="stream-name">04 &nbsp; Brand Partnerships and Sponsorships</div>
-        <span class="badge b-caution">Active — Revenue Structure Needs Clarity</span>
-      </div>
-      <div class="stream-body">
-        H&amp;H has active brand relationships with real visibility and community reach. Auburn AleHouse is the most developed — a co-branded beer with three more releases in progress and event partnerships that extend the mission into community spaces. Old Trapper, Kühl, and Branded Bills are active partners as well. <strong>The strategic question is what the actual revenue structure looks like for each.</strong> Are these producing cash revenue, in-kind product, or exposure? The answer determines how they fit into the sustainability strategy.
-      </div>
-      <div class="stream-tags">
-        <span class="tag">Auburn AleHouse (co-branded beer) ✓</span>
-        <span class="tag">Old Trapper ✓</span>
-        <span class="tag">Kühl ✓</span>
-        <span class="tag">Branded Bills ✓</span>
-      </div>
-      <div class="flag-box">
-        <strong>Needs definition at the whiteboard:</strong> What is the cash revenue from each partnership vs. in-kind vs. exposure? How replicable is the AleHouse model? Are there more community businesses to bring in under a similar structure?
-      </div>
-    </div>
-
-    <!-- Stream 5: Staff Development -->
-    <div class="stream s-build">
-      <div class="stream-top">
-        <div class="stream-name">05 &nbsp; Staff Development and Workshops</div>
-        <span class="badge b-build">Proof of Concept — Scale It</span>
-      </div>
-      <div class="stream-body">
-        One staff development day at TRUSD is a proof of concept with an existing contract partner. <strong>This is the most mission-aligned earned income play on the list.</strong> Training, wellness, team-building, and leadership development for schools and organizations extends H&amp;H's expertise beyond programming and creates a replicable service that districts and community organizations will pay for. With TRUSD already in the relationship, the upsell path is clear.
-      </div>
-      <div class="stream-tags">
-        <span class="tag">TRUSD staff dev day ✓ (completed)</span>
-        <span class="tag">School wellness and team-building →</span>
-        <span class="tag">Leadership training →</span>
-        <span class="tag">Club teams →</span>
-      </div>
-    </div>
-
-    <!-- Stream 6: Creative Services -->
-    <div class="stream s-future">
-      <div class="stream-top">
-        <div class="stream-name">06 &nbsp; Creative Services</div>
-        <span class="badge b-future">Future Play — Structural Review Required</span>
-      </div>
-      <div class="stream-body">
-        H&amp;H has real creative capacity — photography, video, content production, event media — that brands like Old Trapper and Kühl already recognize. <strong>The opportunity is significant. The structure requires thought.</strong> As a nonprofit, generating revenue from unrelated business activities can trigger tax implications under IRS guidelines (UBIT). Whether Creative Services is mission-adjacent enough to qualify as program-related income, or whether it requires a separate structure, is a question that needs legal and strategic clarity before it is built out as a revenue line.
-      </div>
-      <div class="stream-tags">
-        <span class="tag">Photography ○</span>
-        <span class="tag">Video production ○</span>
-        <span class="tag">Event media coverage ○</span>
-        <span class="tag">Social media content packages ○</span>
-        <span class="tag">Brand partnerships ○</span>
-      </div>
-      <div class="flag-box">
-        <strong>Before scaling:</strong> Get clarity on nonprofit revenue rules and whether Creative Services can be structured in a way that protects H&amp;H's tax-exempt status. This is a high-potential play that deserves the right foundation.
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SECTION 3 -->
-  <div class="section">
-    <div class="sec-label">Section Three</div>
-    <div class="sec-title">Questions to Answer Together</div>
-
-    <div class="body">
-      A real strategy for H&amp;H can only be built by the people who know the org, the community, and the mission. These are the questions that make that conversation productive.
-    </div>
-
-    <div class="q-block">
+  <div class="q-list">
+    <div class="q-item">
       <div class="q-num">Question 01</div>
       <div class="q-text">What does H&amp;H look like in three years?</div>
-      <div class="q-body">
-        Not financially. Programmatically. <strong>How many schools, how many kids, how many communities?</strong> The answer to this question sets the revenue target. Everything else in the strategy flows from here.
-      </div>
+      <div class="q-body">Not financially. Programmatically. <strong>How many schools, how many kids, how many communities?</strong> The answer to this question sets the revenue target. Everything else in the strategy flows from here.</div>
     </div>
-
-    <div class="q-block">
+    <div class="q-item">
       <div class="q-num">Question 02</div>
       <div class="q-text">What does it cost for José and Nate to lead full-time?</div>
-      <div class="q-body">
-        The working figure in this brief is <strong>$80K per founder, $160K total.</strong> This needs to be confirmed or corrected. It is the number the strategy is built around. If it is different, the timeline and sequence change.
-      </div>
+      <div class="q-body">The working figure is <strong>$80K per founder, $160K total.</strong> This needs to be confirmed or corrected. It is the number the strategy is built around. If it's different, the timeline and sequence change.</div>
     </div>
-
-    <div class="q-block">
+    <div class="q-item">
       <div class="q-num">Question 03</div>
-      <div class="q-text">What is the TRUSD renewal plan?</div>
-      <div class="q-body">
-        The current $105K contract expires May 2026. <strong>Protecting and growing earned income is the first move in any strategy.</strong> What does renewal look like? Is there a path to a larger contract or a staff development add-on? This shapes everything that follows.
-      </div>
+      <div class="q-text">Which scenario is H&amp;H willing to pursue?</div>
+      <div class="q-body">Conservative, Moderate, or Ambitious - each requires different levels of capacity and attention from José and Nate. <strong>The right answer is the one H&amp;H can actually execute</strong> without overextending the people running the mission.</div>
     </div>
-
-    <div class="q-block">
+    <div class="q-item">
       <div class="q-num">Question 04</div>
-      <div class="q-text">What is the real revenue picture on brand partnerships?</div>
-      <div class="q-body">
-        Auburn AleHouse, Old Trapper, Kühl, Branded Bills. <strong>What is cash, what is in-kind, what is exposure?</strong> The answer determines how these partnerships fit into a sustainability strategy and whether the AleHouse model can be replicated with other community businesses.
-      </div>
+      <div class="q-text">What is the Trailblazers Club target?</div>
+      <div class="q-body">Using the grid above - <strong>what is the realistic donor count and average gift to aim for in Year 1?</strong> Setting a specific number creates accountability and a launch plan around a real goal, not a vague intention.</div>
     </div>
-
-    <div class="q-block">
+    <div class="q-item">
       <div class="q-num">Question 05</div>
-      <div class="q-text">What can realistically be prioritized in Year 1?</div>
-      <div class="q-body">
-        Trailblazers Club, capacity-building grants, staff development expansion, and partnership definition all deserve attention. <strong>Not all at once.</strong> What is H&amp;H ready to move on without overextending the people running the mission?
-      </div>
+      <div class="q-text">What is the TRUSD renewal plan?</div>
+      <div class="q-body">The current $105K contract expires May 2026. <strong>Protecting and growing earned income is the first move in any scenario.</strong> What does renewal look like and is there a path to expanding the scope?</div>
     </div>
-
-    <div class="q-block">
+    <div class="q-item">
       <div class="q-num">Question 06</div>
       <div class="q-text">Who else needs to be in this conversation?</div>
-      <div class="q-body">
-        Building toward leadership sustainability and scaling the mission is not just an operational decision. It is a governance and community decision. <strong>The following people may need to be brought into future conversations:</strong> Marion, Jeff, the coaching staff, and active partners. Who is in which conversation, and when, is part of what gets decided at the whiteboard.
-      </div>
-    </div>
-
-    <div class="wb-box">
-      <div class="wb-label">At the Whiteboard</div>
-      <ul class="wb-list">
-        <li>Define what H&amp;H looks like in three years, programmatically</li>
-        <li>Confirm the annual revenue target needed to get there</li>
-        <li>Confirm or adjust the full-time founder compensation figure</li>
-        <li>Map the six revenue streams — what is active, what gets built first, what waits</li>
-        <li>Define the cash revenue structure for Auburn AleHouse and brand partnerships</li>
-        <li>Identify the first capacity-building grant opportunities to pursue</li>
-        <li>Set a Trailblazers Club launch window and define what readiness looks like</li>
-        <li>Confirm TRUSD renewal strategy before May 2026 expiration</li>
-        <li>Decide who from the board, coaching staff, and partner network joins future conversations</li>
-      </ul>
+      <div class="q-body">Building toward leadership sustainability is not just an operational decision - it's a governance and community one. <strong>Marion, Jeff, the coaching staff, and active partners</strong> may each have a role in future conversations. Who is in which conversation, and when, is part of what gets decided at the whiteboard.</div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="doc-footer">
-    <div class="footer-left">
-      Hike &amp; Hit &nbsp;—&nbsp; Internal Strategy Brief<br>
-      Whiteboard Planning Session Preparation
+  <!-- WHITEBOARD AGENDA -->
+  <div class="wb">
+    <div class="wb-lbl">At the Whiteboard</div>
+    <ul class="wb-list">
+      <li>Define what H&amp;H looks like in three years, programmatically</li>
+      <li>Confirm or adjust the full-time founder compensation figure</li>
+      <li>Choose a scenario pathway and set the revenue target</li>
+      <li>Set a specific Trailblazers Club Year 1 goal using the grid</li>
+      <li>Map all seven revenue streams - what is active, what gets built first, what waits</li>
+      <li>Define cash revenue structure for brand partnerships</li>
+      <li>Confirm TRUSD renewal strategy before May 2026 expiration</li>
+      <li>Identify the first capacity-building grant opportunities to pursue</li>
+      <li>Discuss who from the board, coaching staff, and partner network joins future conversations</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 4: SHARED NEXT STEPS -->
+  <span class="sec-label">What Comes Next</span>
+  <h2 class="sec-title">The work ahead, <em>shared and in sequence.</em></h2>
+  <p class="sec-intro">These are the shared priorities that come out of the whiteboard meeting. Ownership gets assigned in the room. The sequence holds regardless of who owns what.</p>
+
+  <div class="next-grid">
+    <div class="next-card">
+      <div class="next-num">01</div>
+      <div class="next-time">Immediate · 30 Days</div>
+      <div class="next-title">Protect the contract base.</div>
+      <div class="next-body">Document renewal timelines for all active contracts. Begin a structured relationship-first outreach sequence for SCUSD and EGUSD. Confirm TRUSD renewal scope before May 2026 expiration.</div>
+      <div class="next-owner">Owner: TBD at whiteboard</div>
     </div>
-    <div class="footer-right">
-      Prepared by JD Murillo
+    <div class="next-card">
+      <div class="next-num">02</div>
+      <div class="next-time">Immediate · 45 Days</div>
+      <div class="next-title">Launch Trailblazers with a real target.</div>
+      <div class="next-body">Set the Year 1 donor count and average gift goal using the scenario grid. Design a simple donor stewardship sequence: welcome, impact update, renewal touchpoint. Consistency over complexity.</div>
+      <div class="next-owner">Owner: TBD at whiteboard</div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">03</div>
+      <div class="next-time">30-60 Days</div>
+      <div class="next-title">Build the 12-month grant pipeline.</div>
+      <div class="next-body">Create a funder calendar with submission and reporting dates. Identify the first three capacity-building grant opportunities. Ensure program outcome data maps directly to grant reporting requirements.</div>
+      <div class="next-owner">Owner: JD</div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">04</div>
+      <div class="next-time">30-60 Days</div>
+      <div class="next-title">Explore staff development expansion.</div>
+      <div class="next-body">Evaluate the TRUSD staff development day. Define a pricing model and curriculum framework for future offerings. Assess whether current staffing supports expansion without diluting core contracts.</div>
+      <div class="next-owner">Owner: TBD at whiteboard</div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">05</div>
+      <div class="next-time">60-90 Days</div>
+      <div class="next-title">Define brand partnership revenue.</div>
+      <div class="next-body">Map the cash, in-kind, and exposure value of each active partnership. Formalize the Auburn AleHouse revenue-sharing structure. Assess whether the AleHouse model can be replicated with other community businesses.</div>
+      <div class="next-owner">Owner: TBD at whiteboard</div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">06</div>
+      <div class="next-time">60-90 Days</div>
+      <div class="next-title">Get legal clarity on creative services.</div>
+      <div class="next-body">Engage a nonprofit attorney or CPA to review UBIT exposure on the creative services and media arm. Determine the right structure before this stream scales further.</div>
+      <div class="next-owner">Owner: TBD at whiteboard</div>
     </div>
   </div>
 
+</div><!-- end content -->
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="footer-left">
+    Hike &amp; Hit  -  Internal Strategy Brief<br>
+    Whiteboard Planning Session Preparation · Confidential
+  </div>
+  <div class="footer-right">
+    Prepared by JD Murillo
+  </div>
 </div>
+
+<script>
+// Toggle streams
+function toggleStream(hdr) {
+  const stream = hdr.parentElement;
+  const toggle = hdr.querySelector('.stream-toggle');
+  stream.classList.toggle('open');
+  toggle.textContent = stream.classList.contains('open') ? '▲' : '▼';
+}
+
+// Build Trailblazers grid
+(function() {
+  const donors = [25, 50, 100, 150, 200];
+  const gifts  = [10, 25, 50, 75, 100];
+  const tbody = document.getElementById('tbBody');
+
+  donors.forEach(d => {
+    const tr = document.createElement('tr');
+    const th = document.createElement('td');
+    th.className = 'row-hdr';
+    th.textContent = d + ' donors';
+    tr.appendChild(th);
+
+    gifts.forEach(g => {
+      const annual = d * g * 12;
+      const td = document.createElement('td');
+
+      let cls = 'c0';
+      if (annual >= 100000) cls = 'c4';
+      else if (annual >= 50000) cls = 'c3';
+      else if (annual >= 25000) cls = 'c2';
+      else if (annual >= 10000) cls = 'c1';
+
+      td.className = cls;
+
+      const val = document.createElement('span');
+      val.className = 'cell-val';
+      val.textContent = '$' + (annual >= 1000 ? (annual/1000).toFixed(0) + 'K' : annual);
+
+      const sub = document.createElement('span');
+      sub.className = 'cell-sub';
+      sub.textContent = 'per year';
+
+      td.appendChild(val);
+      td.appendChild(sub);
+      td.title = d + ' donors × $' + g + '/mo × 12 = $' + annual.toLocaleString() + '/yr';
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+
 </body>
 </html>
